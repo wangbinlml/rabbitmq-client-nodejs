@@ -372,7 +372,12 @@ function connectRMQ_receive(mqUrlArr, queueName, durable, noAck, reconnectTime, 
                 var ok = ch.assertQueue(queueName, {durable: durable});
 
                 ok = ok.then(function (_qok) {
-                    return ch.consume(queueName, callback, {noAck: noAck});
+                    var result = ch.consume(queueName,
+                        function (msg) {
+                            callback(msg, noAck, ch);
+                        },
+                        {noAck: noAck});
+                    return result;
                 });
 
                 return ok.then(function (_consumeOk) {
