@@ -166,7 +166,9 @@ function connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, re
                     });
                 });
                 ok = ok.then(function (queue) {
-                    return ch.consume(queue, callback, {noAck: noAck});
+                    return ch.consume(queue, function (msg) {
+                        callback(msg, noAck, ch);
+                    }, {noAck: noAck});
                 });
                 return ok.then(function () {
                 });
@@ -241,7 +243,9 @@ function connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, e
                 });
 
                 ok = ok.then(function (queue) {
-                    return ch.consume(queue, callback, {noAck: noAck});
+                    return ch.consume(queue, function (msg) {
+                        callback(msg, noAck, ch);
+                    }, {noAck: noAck});
                 });
                 return ok.then(function () {
                 });
@@ -318,7 +322,9 @@ function connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, excl
                 });
 
                 ok = ok.then(function (queue) {
-                    return ch.consume(queue, callback, {noAck: noAck});
+                    return ch.consume(queue, function (msg) {
+                        callback(msg, noAck, ch);
+                    }, {noAck: noAck});
                 });
                 return ok.then(function () {
                 });
