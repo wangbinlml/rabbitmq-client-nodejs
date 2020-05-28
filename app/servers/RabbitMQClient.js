@@ -98,7 +98,7 @@ function rmq_rpc(mqUrlArr, queueName, msg, exclusive, noAck, reconnectTime, call
             });
         }).then(null, function () {
             mqCount();
-            setTimeout(rmq_rpc(mqUrlArr, queueName, msg, exclusive, noAck, reconnectTime, callback), reconnectTime);
+            setTimeout(function (){rmq_rpc(mqUrlArr, queueName, msg, exclusive, noAck, reconnectTime, callback)}, reconnectTime);
             console.log("连接失败，正在重试，",mqUrlArr);
         });
     } catch (e) {
@@ -141,7 +141,7 @@ function rmq_task(mqUrlArr, queueName, msg, durable, deliveryMode, reconnectTime
             });
         }).then(null, function () {
             mqCount();
-            setTimeout(rmq_task(mqUrlArr, queueName, msg, durable, deliveryMode, reconnectTime), reconnectTime);
+            setTimeout(function (){rmq_task(mqUrlArr, queueName, msg, durable, deliveryMode, reconnectTime)}, reconnectTime);
             console.log("连接失败，正在重试，",mqUrlArr);
         });
     } catch (e) {
@@ -184,7 +184,7 @@ function rmq_fanout(mqUrlArr, exchangeName, msg, durable, reconnectTime) {
             });
         }).then(null, function () {
             mqCount();
-            setTimeout(rmq_fanout(mqUrlArr, exchangeName, msg, durable, reconnectTime), reconnectTime);
+            setTimeout(function (){rmq_fanout(mqUrlArr, exchangeName, msg, durable, reconnectTime)}, reconnectTime);
             console.log("连接失败，正在重试，",mqUrlArr);
         });
     } catch (e) {
@@ -228,7 +228,7 @@ function rmq_direct(mqUrlArr, exchangeName, msg, durable, severity, reconnectTim
             });
         }).then(null, function () {
             mqCount();
-            setTimeout(rmq_direct(mqUrlArr, exchangeName, msg, durable, severity, reconnectTime), reconnectTime);
+            setTimeout(function (){rmq_direct(mqUrlArr, exchangeName, msg, durable, severity, reconnectTime)}, reconnectTime);
             console.log("连接失败，正在重试，",mqUrlArr);
         });
     } catch (e) {
@@ -273,7 +273,7 @@ function rmq_topic(mqUrlArr, exchangeName, msg, durable, topicKey, reconnectTime
             });
         }).then(null, function () {
             mqCount();
-            setTimeout(rmq_topic(mqUrlArr, exchangeName, msg, durable, topicKey, reconnectTime), reconnectTime);
+            setTimeout(function (){rmq_topic(mqUrlArr, exchangeName, msg, durable, topicKey, reconnectTime)}, reconnectTime);
             console.log("连接失败，正在重试，",mqUrlArr);
         });
     } catch (e) {
@@ -317,7 +317,7 @@ function rmq_send(mqUrlArr, queueName, msg, durable, reconnectTime) {
             });
         }).then(null, function () {
             mqCount();
-            setTimeout(rmq_send(mqUrlArr, queueName, msg, durable, reconnectTime), reconnectTime);
+            setTimeout(function (){rmq_send(mqUrlArr, queueName, msg, durable, reconnectTime)}, reconnectTime);
             console.log("连接失败，正在重试，",mqUrlArr);
         });
     } catch (e) {
