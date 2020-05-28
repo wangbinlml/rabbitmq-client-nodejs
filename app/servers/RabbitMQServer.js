@@ -29,7 +29,7 @@ function connectRMQ_RPC(mqUrlArr, queueName, durable, noAck, reconnectTime, pref
             conn.on('close', function () {
                 console.error('Lost connection to RMQ.  Reconnecting in ' + reconnectTime + 'ms...');
                 mqCount();
-                return setTimeout(connectRMQ_RPC(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback), reconnectTime);
+                return setTimeout(function (){connectRMQ_RPC(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback)}, reconnectTime);
             });
             return conn.createChannel().then(function (ch) {
 
@@ -54,7 +54,7 @@ function connectRMQ_RPC(mqUrlArr, queueName, durable, noAck, reconnectTime, pref
                 }
             });
         }).then(null, function () {
-            setTimeout(connectRMQ_RPC(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback), reconnectTime);
+            setTimeout(function (){connectRMQ_RPC(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback)}, reconnectTime);
             mqCount();
             return console.log("连接失败，正在重试，",mqUrlArr);
         });
@@ -91,7 +91,7 @@ function connectRMQ_worker(mqUrlArr, queueName, durable, noAck, reconnectTime, p
             conn.on('close', function () {
                 console.error('Lost connection to RMQ.  Reconnecting in ' + reconnectTime + 'ms...');
                 mqCount();
-                return setTimeout(connectRMQ_worker(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback), reconnectTime);
+                return setTimeout(function (){connectRMQ_worker(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback)}, reconnectTime);
             });
             return conn.createChannel().then(function (ch) {
 
@@ -114,7 +114,7 @@ function connectRMQ_worker(mqUrlArr, queueName, durable, noAck, reconnectTime, p
                 }
             });
         }).then(null, function () {
-            setTimeout(connectRMQ_worker(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback), reconnectTime);
+            setTimeout(function (){connectRMQ_worker(mqUrlArr, queueName, durable, noAck, reconnectTime, prefetchNum, callback)}, reconnectTime);
             mqCount();
             return console.log("连接失败，正在重试，",mqUrlArr);
         });
@@ -153,7 +153,7 @@ function connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, re
             conn.on('close', function () {
                 console.error('Lost connection to RMQ.  Reconnecting in ' + reconnectTime + 'ms...');
                 mqCount();
-                return setTimeout(connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, reconnectTime, callback), reconnectTime);
+                return setTimeout(function (){connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, reconnectTime, callback)}, reconnectTime);
             });
             return conn.createChannel().then(function (ch) {
                 var ok = ch.assertExchange(exchangeName, 'fanout', {durable: durable});
@@ -166,9 +166,7 @@ function connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, re
                     });
                 });
                 ok = ok.then(function (queue) {
-                    return ch.consume(queue, function (msg) {
-                        callback(msg, noAck, ch);
-                    }, {noAck: noAck});
+                    return ch.consume(queue, callback, {noAck: noAck});
                 });
                 return ok.then(function () {
                 });
@@ -177,7 +175,7 @@ function connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, re
                 }
             });
         }).then(null, function () {
-            setTimeout(connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, reconnectTime, callback), reconnectTime);
+            setTimeout(function (){connectRMQ_fanout(mqUrlArr, exchangeName, durable, noAck, exclusive, reconnectTime, callback)}, reconnectTime);
             mqCount();
             return console.log("连接失败，正在重试，",mqUrlArr);
         });
@@ -217,7 +215,7 @@ function connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, e
             conn.on('close', function () {
                 console.error('Lost connection to RMQ.  Reconnecting in ' + reconnectTime + 'ms...');
                 mqCount();
-                return setTimeout(connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, exclusive, reconnectTime, callback), reconnectTime);
+                return setTimeout(function (){connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, exclusive, reconnectTime, callback)}, reconnectTime);
             });
 
             return conn.createChannel().then(function (ch) {
@@ -243,9 +241,7 @@ function connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, e
                 });
 
                 ok = ok.then(function (queue) {
-                    return ch.consume(queue, function (msg) {
-                        callback(msg, noAck, ch);
-                    }, {noAck: noAck});
+                    return ch.consume(queue, callback, {noAck: noAck});
                 });
                 return ok.then(function () {
                 });
@@ -254,7 +250,7 @@ function connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, e
                 }
             });
         }).then(null, function () {
-            setTimeout(connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, exclusive, reconnectTime, callback), reconnectTime);
+            setTimeout(function (){connectRMQ_direct(mqUrlArr, exchangeName, severities, durable, noAck, exclusive, reconnectTime, callback)}, reconnectTime);
             mqCount();
             return console.log("连接失败，正在重试，",mqUrlArr);
         });
@@ -294,7 +290,7 @@ function connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, excl
             conn.on('close', function () {
                 console.error('Lost connection to RMQ.  Reconnecting in ' + reconnectTime + 'ms...');
                 mqCount();
-                return setTimeout(connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, exclusive, reconnectTime, callback), reconnectTime);
+                return setTimeout(function (){connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, exclusive, reconnectTime, callback)}, reconnectTime);
             });
 
             return conn.createChannel().then(function (ch) {
@@ -322,9 +318,7 @@ function connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, excl
                 });
 
                 ok = ok.then(function (queue) {
-                    return ch.consume(queue, function (msg) {
-                        callback(msg, noAck, ch);
-                    }, {noAck: noAck});
+                    return ch.consume(queue, callback, {noAck: noAck});
                 });
                 return ok.then(function () {
                 });
@@ -333,7 +327,7 @@ function connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, excl
                 }
             });
         }).then(null, function () {
-            setTimeout(connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, exclusive, reconnectTime, callback), reconnectTime);
+            setTimeout(function (){connectRMQ_topic(mqUrlArr, exchangeName, topicKey, durable, noAck, exclusive, reconnectTime, callback)}, reconnectTime);
             mqCount();
             return console.log("连接失败，正在重试，",mqUrlArr);
         });
@@ -371,26 +365,23 @@ function connectRMQ_receive(mqUrlArr, queueName, durable, noAck, reconnectTime, 
             conn.on('close', function () {
                 console.error('Lost connection to RMQ.  Reconnecting in ' + reconnectTime + 'ms...');
                 mqCount();
-                return setTimeout(connectRMQ_receive(mqUrlArr, queueName, durable, noAck, reconnectTime, callback), reconnectTime);
+                return setTimeout(function (){connectRMQ_receive(mqUrlArr, queueName, durable, noAck, reconnectTime, callback)}, reconnectTime);
             });
 
             return conn.createChannel().then(function (ch) {
                 var ok = ch.assertQueue(queueName, {durable: durable});
 
                 ok = ok.then(function (_qok) {
-                    var result = ch.consume(queueName,
-                        function (msg) {
-                            callback(msg, noAck, ch);
-                        },
-                        {noAck: noAck});
-                    return result;
+                    return ch.consume(queueName, callback, {noAck: noAck});
                 });
 
                 return ok.then(function (_consumeOk) {
                 });
             });
         }).then(null, function () {
-            setTimeout(connectRMQ_receive(mqUrlArr, queueName, durable, noAck, reconnectTime, callback), reconnectTime);
+            setTimeout(function (){
+                connectRMQ_receive(mqUrlArr, queueName, durable, noAck, reconnectTime, callback)
+            }, reconnectTime);
             mqCount();
             return console.log("连接失败，正在重试，",mqUrlArr);
         });
